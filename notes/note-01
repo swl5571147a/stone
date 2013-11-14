@@ -1,0 +1,48 @@
+1)常用调用函数
+  id()           查看该变量或者值在内存中的位置
+  type()         查看变量类型
+  raw_input()    用来交互式输入，一般用来获取字符串
+  input()        用来交互式输入，一般用来获取数字
+  sun()          用来求和，可以对数字/列表/等求和，sun([1,2,3]),sum(l2)
+
+2)列表表达式
+  用处：操作列表并输出新的列表
+  例子：l2 = [i for i in range(1,10,2) if i%3 == 0 or i%5 == 0]
+
+3)随机数
+  导入：import random
+  使用：random.random()    输出一个0到1之间的小数
+  	random.randint(1,10)    输出一个1到10的整数
+
+4)生成器
+  作用：节省内存，采用迭代式存储
+  range(10)    生成一个10以内的列表
+  xrange(10)   生成一个10以内的xrange类型数值，节省内存
+  l2 = (i for i in range(1,10,2) if i%3 == 0 or i%5 == 0)   这样生成的
+       l2也是生成器，不是一个列表
+
+ 5)文件操作
+   open('filename','moudle')    打开句柄，moudle表示模式r(读)  w(写)
+                                a(追加)  b(读取图片)
+   close()                      关闭文件句柄
+   seek(0,0)                    移动指针到开始，否则read只能读一次
+   read()                       读取文件，正常只能读取一次
+   flush()                      刷新文件，否则只有关闭才能看到文件更新
+   readline()                   每次只读取一行
+
+6)异常处理
+  例子：try:
+	   print hello
+        except NameError,msg:
+           print 'error:',msg
+  说明：其中try,except为语法，NameError为错误类型，msg为错误信息。其
+        中NameError为错误类型，需要跟系统保持一直，msg可以自行定义，代表错
+        误信息
+
+7)模块
+  所有后缀为.py的文件都可以被当作是模块
+  默认在同级目录查找，如果找不到，到python安装目录找：/usr/lib/python2.7/
+  下找，如果还没有找到，到其目录下的第三方库查找。
+  其它库安装：easy_install   python-setuptools
+  判定是否是自己的文件还是导入的，依靠__name__判断，如果
+  __name__==__main__则代表直接调用

@@ -1,0 +1,12 @@
+1.匿名函数的使用
+  l = [1,2,3,4]
+  map(lambda x: x += 2,l)
+  map作用：遍历其第二个参数，并对每一个参数执行前面的函数
+  lambda作用：匿名函数，不具备名字，但可以随写随用
+
+2.
+  kill的信号级别 man signal查看
+  -2  INT
+  -1  HUP    一般会被用来做重新加载reload的信号，如apache,nginx
+  -9  KILL
+  -15 TERM

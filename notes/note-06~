@@ -1,0 +1,60 @@
+1.系统命令调用--os.system
+  os.system(cmd)         执行并输出结果，成功返回0，失败返回其他数字，例如：256代表无权限，32512代表无此命令
+
+2.系统命令调用--os.popen系列
+  os.popen(cmd)          执行并返回标准输出stdout，输出一个标准文件对象，如ls
+
+  os.popen2(cmd,mode='t',bufsize=-1)    返回标准输入和标准输出,需要额外配合使用
+	stdin,stdout = os.popen2('sort')
+	stdin.write(obj)
+	stdin.close()
+	print stdout.read()
+
+  os.popen3('cmd')       执行并返回stdin,stdout,stderr
+  os.popen4('cmd')       执行并返回stdin,stdout_stderr
+
+  ls sss j 2> /dev/null  将标准错误输出到/dev/null
+
+2.系统命令调用--os.subprocess
+  subprocess.call        调用系统命令，成功返回0,如果不写，默认shell=False
+	subprocess.call(['rm','-rf','dir'][,shell=False])   使用列表来存储命令的各个部分，默认shell=false。如果
+                                                        这里将shell改成True，则只执行列表中的第一个元素。
+	subprocess.call(['ls','-l'],shell=True)             只执行ls命令，无法执行-l后面的。
+	subporcess.call('rm -rf dir',shell=True)            使用字符串来存储命令，并要求shell=True来标记使用shell
+
+  subprocess.check_call  
+	subprocess.check_call('mkdir aaa',shell=True)       
+	try:
+		pass
+	except Exception,msg:          当不明确类的名称或名称太长不愿意写，可以用Exception代表所有异常
+		pass
+
+  subprocess.Popen        相当与os.popen3
+  subprocess.Popen(['ls','-l'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+  	from subprocess import Popen,PIPE
+	subf = Popen(['ls','-l'],stdin=PIPE,stdout=PIPE,stderr=PIPE,shell=False)
+	subf.stdin.write(s)
+	subf.stdin.close()
+	print subf.stdout.read()
+
+3.glob通配符
+  import glob
+  glob.glob('a*')        通配当前目录下所有以a开头的对象
+
+4.命令切分
+  import shlex
+  cmd = 'ls -l /'
+  args = shlex.split(cmd)   返回args=['ls','-l','/']
+  配合subprocess使用，可以将命令只能切分成所需要的形式Popen(shlex.split(cmd),stdout=PIPE,stderr=PIPE)
+
+5.PIPE管道使用
+  p1 = Popen(['ls'],stdout=PIPE)
+  p2 = Popen(['grep','a'],stdin=p1.stdout,stdout=PIPE)  stdin从其他的stdout来获取
+
+  p3 = Popen(['ls'],stdout=open('ls.txt','w'))     stdout到其他地方，如文件等
+
+
+
+作业：
+1.把进程树程序修改成从/proc获取   全是数字的目录
+2.把HTTPD的进程内存计算出来，占用物理内存vmrss的大小和占用物理内存的比例

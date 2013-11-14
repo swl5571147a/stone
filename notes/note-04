@@ -1,0 +1,34 @@
+1.通配符
+	import glob    通配符，在使用wc.py *.py即自动将*.py扩展为文件列表
+	eg:lst = glob.glob('*.py')   *会被自动扩展，不过如果在windows下不可被执行
+
+2.参数控制
+	from optparse import OptionParser
+	
+	parser = OptionParser(usage = "%prog [-l] [-w] [-c] files...")    %prog返回该文件名称，实例化对象
+	parser.add_option('-c','--char',dest='char',action='store_true',default=False,help='char length')
+	注：-c --char表示参数表达形式，dest表示key，action表示行为，一般用的较多的是store，store_true,store_flase,
+		append,help表示帮助信息
+	parser.add_option('-w','--word',dest='word',action='store_true',default=False,help='word count')
+	parser.add_option('-l','--line',dest='line',action='store_true',default=False,help='line count')
+	parser.add_option('-f','--file',dest='file',action='append',type='string',help='file string')
+
+	p,args = parser.parse_args()	
+
+	if not (p.char or p.word or p.line):
+		p.char,p.word,p.line = True,True,True      在不输入参数时，输出全部
+	
+3.os
+	os.path.dirname(__file__)     获得当前文件所在的目录名称，获取文件所在目录
+	os.path.isfile(filename)      判断是否为文件nhjjjjgf
+	os.path.isdir(dirname)        判断是否为目录
+	os.paht.abspath(object)       输出该对象完成的路径，可以是文件或目录
+	os.path.exists(filename)      判断文件是否存在
+	os.listdir(pwd)               列出该目录下的所有内容      
+	os.path.join('/var','www')         拼接路径成/var/www
+	os.path.splitext('index.html')     切分文件，分问两个：文件名和后缀名
+
+
+作业：
+	1.不允许__name__不被其他导入执行
+	2.给wc增加-n,--no-total不打印total行

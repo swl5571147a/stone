@@ -1,0 +1,156 @@
+查看文档：
+	python内：help(dict)
+	python外：pydoc dict
+	import this  可以看到python诗
+dict  字典
+    key value
+格式：
+    {key1:value1,key2:value2,.....}
+生成：
+	空字典     {}
+	带数据的字典   {key:value}
+	list生成       dict(list)
+	dict(**keywords)    通过关键字生成，例如：name='swl',age='24'  
+                        d=dict(name=name,age=age)
+引用字典数据：
+	d[key]
+修改：
+	d[key]=new value
+删除：
+	del d[key]   删除d[key]
+	d.clear()    清空d
+遍历：
+	for key in dict:
+		dict[key]
+
+	for key,value in kict.items():
+		print 'key is %s,value is %s' %(key,value)
+转换：
+	dict.items()       eg:list = dict.items()
+	dict(list)         eg:dict = dict(list)
+    list = [(‘key1',value1),('key2',value2),('key3',value3)]
+KeyError异常处理：
+	try:
+		xxxx
+	except KyeError:
+		xxxx
+无异常处理：
+	1/使用dict.has_key(key)进行判断处理
+	2/使用dict.get(key[,d])进行处理，当存在key时，输出dict[key]，否则输出d
+常用操作：
+  copy()
+	使用d2=d1对d2进行赋值操作时，当对d2操作时，d1同样会变化，为了杜绝此类，可以使用
+	d2=d1.copy()     将d1内的内容浅复制给d2
+  clear()
+	清空整个字典    d.clear()
+  get()
+	d.get(key[,d])     同上面此类说明
+  update()
+	更新字典,例如：d1.update(d2)   将d2内的内容更新到d1中，如果d1中已有则更新，没有
+                                   则追加。
+  del d.[key]
+	删除某个value
+  items()
+  keys()
+  values()
+==============================================================================
+opp
+  1.对象
+	所有一切实体都是对象
+  2.类型（类）：
+	类型-----类
+	对象一定是某种类型的
+	type()  查看其类型
+  3.内置的类：
+  4.自定义类：
+	定义：
+		class ClassName(object):
+			def __init__(self,形参):
+				self.xx = xx
+				pass
+		注：有object为新式类，没有为老式类，建议使用新式类。
+  			支持多重继承
+			一般都是首字母大写
+	使用：实例化类-----对象
+		p1 = ClassName()
+	类体组成：
+		成员方法（对象来调用）：
+			第一个形参：self对象本身----this
+			__init__()不要加return
+			__del__()  在实例化对象被删除或内存释放，自动执行（一般脚本执行完成自动
+                       释放）
+
+		类方法（类来调用）：
+			形式：@classmethod
+				  def fun_name(cls,....)
+			其中@classmethod和cls都是必须的
+				实例对象可以调用类方法，但是类方法不能调用实例方法（也就是成员方法
+
+		静态方法：
+			只希望在该类中被调用，不希望在外面被调用
+			形式：@staticmethod
+				  def fun)name():
+			使用：实例对象可以直接使用
+				  类对象也可以直接使用
+   				  类内：
+					  类名.静态方法()    就是说在成员方法中调用时，需要此类处理
+
+继承：
+	代码复用：
+	class子类(父类)：
+		pass
+	子类继承父类的一切。
+	子类可以新建自己的属性，方法
+	__init__(self)
+		子类没有定义__init__()，自动调用父类的__init__()方法
+
+框架：
+Django
+  web开源框架
+  安装：下载安装包，解压，执行sudo python setup.py install
+  1.创建工程
+	django-admin.py startproject 工程名称
+	cd 工程名称
+	tree    可以看到当前目录结构
+	.
+	├── manage.py
+	└── swl
+    	├── __init__.py
+    	├── settings.py
+    	├── urls.py
+    	└── wsgi.py
+	2.在工程目录中运行开发server
+	  运行命令：python manage.py runserver 0.0.0.0:8000
+	  后面IP如果本机测试可以不用填写，默认端口号即为8000，如果需要其他主机访问，
+      则需要填写0.0.0.0
+	  然后访问Ip地址即可。
+	3.创建应用
+	  在工程目录下创建应用：
+	  python manage.py startapp 应用名称
+	4.配置
+	  工程目录下/setting.py
+		配置DB     追加sqlite3,给一个自己定义的DB名称
+		添加app    在INSTALLED_APPS中最后添加，添加刚才创建的应用名称
+	5.添加url
+	    url(r'^index/$','blog.views.index'),
+		其中index/$表示访问路径，可以自己定义，’blog.views.index‘表示由应用blog
+        下面的views.py中的index方法来回应。
+	6.添加网页反应
+		在应用目录下/views.py
+		导入应用包：
+			import django.http import HttpResponse
+			import django.shortcuts import render
+		定义函数：
+			def index(reg):
+				return render(reg,'index.html',{'f':file})
+			该处index.html表示./templates/下的模版文件，通过后面字典的key来传值
+		创建保存模版文件的目录：
+			应用目录下创建templates，将index.html文件保存在该目录下。
+
+
+
+
+
+
+
+

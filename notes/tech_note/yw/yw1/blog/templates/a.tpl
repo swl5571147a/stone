@@ -1,0 +1,12 @@
+<html>
+<head>
+</head>
+<body>
+<h3>文件内容：</h3>
+<pre>
+<p>
+{{s}}
+</p>
+</pre>
+</body>
+</html>
