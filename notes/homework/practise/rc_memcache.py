@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os
+import sys, os, time
 from subprocess import Popen, PIPE
 
 def ReadConfigFile(file_name):
@@ -72,10 +72,10 @@ class ProcessManager():
                    #print 'The command of touch the dir:%s is OK!'%self.name
            except:
                err_touch = 'The command of touch the dir:%s could not be done!'%self.name
-       if err_touch:
-           for i in err_touch.split('\n'):
-               print i
-        
+           if err_touch:
+               for i in err_touch.split('\n'):
+                   print i
+            
     def rm_pid_dir(self):
         pid_dir = '/var/run/%s'%self.name
         rm_cmd = ['rm', '-rf', pid_dir]
@@ -99,7 +99,7 @@ class ProcessManager():
             print cmd_err
 
     def stop(self):
-        with open(self.pidfile, 'r') as fp:
+        with open(self.pidfile) as fp:
             pid = fp.read().strip()
         cmd = ['kill', '-15', pid]
         try:
@@ -131,4 +131,7 @@ if __name__ == '__main__':
         pm.stop()
     if sys.argv[1] == 'status':
         pm.status()
-        pm.status()
+    if sys.argv[1] == 'restart':
+        pm.stop()
+        time.sleep(1)
+        pm.start()

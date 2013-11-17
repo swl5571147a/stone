@@ -1,0 +1,104 @@
+1.正则表达式  RE
+  \d  代表[0-9]
+  \w  代表[0-9a-zA-Z]
+
+  eg: 不编译  findall
+	s = 'top txt ttt top'
+    reg = r'top'
+	re.findall(reg,s)
+	注意：返回一个列表
+
+  eg:编译 findall
+	rego = re.compile(r'top')
+	rego.findall(s)
+	注：编译以后的正则表达式在运行速度上会快很多
+
+  eg:不编译 match匹配
+	tt = re.match(reg,s)
+	注：只从开头去匹配，不匹配中间数据。返回一个对象
+	tt.group()  该方法会返回所匹配到的字符串
+
+  eg:不编译 search搜索
+	re.search(reg,s)
+	类似findall，但是返回的为一个对象，可以使用group()来调用列表
+
+  eg: sub 匹配并替换
+	rego = re.compile(r'top')
+	rego.sub('good',s)
+
+  eg:  re.I
+	rego = re.compile(r'top',re.I)
+	rego.findall(s)
+	注：这样就不区分大小写
+
+  eg: re.S  .
+	rego = re.compile(r't.p',s,re.S)
+    匹配所有以t开头p结尾的字符串，因为.不匹配换行符\n，所以使用re.S来表示需要匹配\n，也就是't\np'也会被匹配
+
+  eg: re.M  ^
+	s = '''
+	hello world
+	hello you
+	no hello
+	'''
+	re.findall(r'^hello',s,re.M)
+	注：^表示匹配以hello开头，re.M表示匹配每一行。
+
+  eg:  ()  分组数据
+	re.findall(r'(^ftp),s,re.M)
+	当有()表示分组数据，只返回分组数据的内容
+
+  eg:  {}  匹配限定次数
+	reg = r'[0-9a-zA-Z_]{1,16}'          匹配1到16个字符
+	reg = r'\w{1,16}'                    等同上面
+
+  eg:  re.X  |
+	reg = r'''
+		\w{1,16}
+		@
+		\w+
+		\.
+		[a-zA-Z]{2,3}
+	'''
+	re.findall(reg,s,re.X|re.M)
+	注：可以用来匹配邮箱，当正则也是多行的时候，需要添加re.X，当有多个模式的时候，需要使用 | 来表示
+
+  eg:  .*?  最小匹配方式
+	s = '<h1> heloo </h1>'
+    reg = re.compile(r'^<.*>')        此处会把整个s匹配出来<h1> heloo </h1>
+	reg = re.compile(r'^<.*?>')       此处会只匹配<h1>和</h1>
+    注： .*? 会表示最小匹配模式
+
+
+2.安装下载软件
+  pip install django==1.5       可以自动安装软件使用
+
+3.关闭django的admin验证
+  vim setting.py
+  修改如下内容：
+  MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    #sunwenlong
+    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    # Uncomment the next line for simple clickjacking protection:
+    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+  'django.middleware.csrf.CsrfViewMiddleware'   这一行代表的就是拒绝非本域名所来的POST 或 GET数据对数据库的操作
+
+4.测试数据库是否可用
+  ./manage.py shell    进入django的shell模式，可以测试数据库是否可用
+
+
+
+
+
+
+
+
+
+
+
