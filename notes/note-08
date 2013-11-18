@@ -92,12 +92,31 @@
 4.测试数据库是否可用
   ./manage.py shell    进入django的shell模式，可以测试数据库是否可用
 
+5.urllib urllib2  在python 3中使用的是httplib
+  req = urllib2.urlopen(url)
+  dict = {'s':'ss','t':'tt'}
+  d = urllib.urlencode(d)          将字典转换成url可以使用信息，采用POST传输
+  req = rullib2.urlopen(url,d)     打开url并将字典d作为参数传递过去
+
+6.简单序列话
 
 
 
+7.JSON是被设计为跨语言使用的
 
 
+8.MVC
+  M  model
+  V  templates
+  C  views
 
+9.bootstrap   框架，相当于templates中的内容
+
+10.python模拟http服务
+  python -m "SimpleHTTPServer"
+
+11.白老师github
+  github.com/guixing
 
 
 

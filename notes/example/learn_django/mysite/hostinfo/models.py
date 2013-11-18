@@ -10,3 +10,7 @@ class Host(models.Model):
     cpu_num = models.IntegerField(max_length=2)
     memory = models.IntegerField(max_length=8)
     sn = models.CharField(max_length=30)
+
+class IpAddr(models.Model):
+    ipaddr = models.IPAddressField()
+    host = models.ForeignKey('Host')

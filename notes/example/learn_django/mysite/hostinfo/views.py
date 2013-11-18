@@ -1,6 +1,10 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-from models import Host
+from models import Host,IpAddr
+try:
+    import json
+except:
+    import simplejson as json
 
 def collect(request):
     req = request
@@ -13,7 +17,7 @@ def collect(request):
         sn = req.POST.get('sn')
         osver = req.POST.get('osver')
         hostname = req.POST.get('hostname')
-        ipaddr = req.POST.get('ipaddr')
+        ipaddrs = req.POST.get('ipaddrs')
 
         host = Host()
         host.vender = vender
@@ -27,6 +31,13 @@ def collect(request):
 
         host.save()
 
+        for ip in ipaddrs.split(':'):
+            o_ip = IpAddr()
+            o_ip.ipaddr = ip
+            o_ip.host = host
+            o_ip.save()
+
         return HttpResponse('OK')
     else:
         return HttpResponse('No post data')
+
