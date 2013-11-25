@@ -110,6 +110,7 @@ class ShellManage():
                 with open(self.log,'a') as fp_log:
                     start_log = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + ':' + 'Sucessfully start!' + '\n'
                     fp_log.write(start_log)
+                print 'Done! The %s is running now, the pid is %s' %(self.name,pid)
             else:
                 print err_start
         else:
@@ -120,43 +121,33 @@ class ShellManage():
             with open(self.pid_file) as fp:
                 pid = fp.read().strip()
         except:
-            print 'The pid file is not exists!'
-            sys.exit(1)
-        stop_cmd = ['sudo','kill','-15',pid]
-        try:
-            subf_stop = Popen(stop_cmd,stderr=PIPE)
-            err_stop = subf_stop.stderr.read()
-        except:
-            err_stop = 'The command of stop the %s could not be done!'%self.name
-        if err_stop:
-            print err_stop
+            pid = self.get_pid()
+            print 'Warning! The pid file is not exists!'
+        if pid:
+            stop_cmd = ['sudo','kill','-15',pid]
+            try:
+                subf_stop = Popen(stop_cmd,stderr=PIPE)
+                err_stop = subf_stop.stderr.read()
+            except:
+                err_stop = 'The command of stop the %s could not be done!'%self.name
+            if err_stop:
+                print err_stop
+            else:
+                print 'Done! The command of stop the %s is done!' %self.name
+                stop_log = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + ':' + 'Sucessfully stop!' + '\n'
+                with open(self.log,'a') as fp_log:
+                    fp_log.write(stop_log)
         else:
-            stop_log = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())) + ':' + 'Sucessfully stop!' + '\n'
-            with open(self.log,'a') as fp_log:
-                fp_log.write(stop_log)
+            print 'Error! The %s is not running!' %self.name
 
         self.rm_pid_dir()
 
     def status(self):
-        grep_cmd = 'ps aux|grep %s|grep -v grep'%self.name
-        print 'hhhhhhh'
-        try:
-            subf_grep = Popen(grep_cmd,stdout=PIPE,stderr=PIPE,shell=True)
-            data_grep = subf_grep.stdout.read()
-            err_grep = subf_grep.stderr.read()
-            print '11111'
-        except:
-            err_grep = 'The command of grep %s could not be done!'%self.name
-            data_grep = ''
-        if err_grep:
-            print err_grep
-        if data_grep:
-            print '2222222'
-            grep_pid = data_grep.split()[1]
+        grep_pid = self.get_pid()
+        if grep_pid:
             try:
                 with open(self.pid_file) as fp:
                     file_pid = fp.read().strip()
-                print '333333'
             except:
                 file_pid = ''
             if grep_pid == file_pid:
@@ -167,7 +158,30 @@ class ShellManage():
             print 'The %s is not running'%self.name
 
     def restart(self):
-        pass
+        pid = self.get_pid()
+        if pid:
+            self.stop()
+            self.start()
+        else:
+            print 'Warning! Nothing to be done, because the %s is not running!'%self.name
+            self.start()
+
+    def get_pid(self):
+        grep_cmd = 'ps aux|grep %s|grep -v grep'%self.name
+        try:
+            subf_grep = Popen(grep_cmd,stdout=PIPE,stderr=PIPE,shell=True)
+            data_grep = subf_grep.stdout.read()
+            err_grep = subf_grep.stderr.read()
+        except:
+            err_grep = 'The command of grep %s could not be done!'%self.name
+            data_grep = ''
+        if err_grep:
+            print err_grep
+        if data_grep:
+            grep_pid = data_grep.split()[1]
+        else:
+            grep_pid = ''
+        return grep_pid
     
 if __name__ == '__main__':
     name='memrelease'
@@ -182,5 +196,7 @@ if __name__ == '__main__':
         sm.stop()
     if sys.argv[1] == 'status':
         sm.status()
+    if sys.argv[1] == 'restart':
+        sm.restart()
 
 

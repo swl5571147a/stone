@@ -29,9 +29,17 @@ def release():
             fp.write('\n')
             fp.write(err)
 
+def get_mcu_status():
+    '''CPU [>%150 Warning] [>%300 Dangerous]
+    MEM [>%10 Warning] [>%30 Dangerous]
+    time [>1440 restart] [<1440 count]
+    count [30s * 20 restart]
+    '''
+
+
 if __name__ == '__main__':
     while True:
-        if float(free_pro()) > 70:
+        if float(free_pro()) > 50:
             free_cmd = ['free']
             current_time = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
             try:
