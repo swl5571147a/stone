@@ -190,13 +190,18 @@ if __name__ == '__main__':
     pid_file = '/var/run/%s/%s.pid'%(name,name)
     py_script = './memrelease.py'
     sm = ShellManage(name=name,log=log,pid_dir=pid_dir,pid_file=pid_file,py_script=py_script)
-    if sys.argv[1] == 'start':
-        sm.start()
-    if sys.argv[1] == 'stop':
-        sm.stop()
-    if sys.argv[1] == 'status':
-        sm.status()
-    if sys.argv[1] == 'restart':
-        sm.restart()
-
+    try:
+        if sys.argv[1] == 'start':
+            sm.start()
+        elif sys.argv[1] == 'stop':
+            sm.stop()
+        elif sys.argv[1] == 'status':
+            sm.status()
+        elif sys.argv[1] == 'restart':
+            sm.restart()
+        else:
+            print 'Only {start|stop|status|restart} can be used!'
+    except:
+        print 'You should use {start|stop|status|restart} to use it!'
+    
 
