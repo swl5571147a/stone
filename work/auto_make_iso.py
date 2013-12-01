@@ -13,7 +13,8 @@ conf = {'path_mcu':'/home/broad/sunwenlong/iserver-mcu/medooze',
         'port':22,
         'remote_ip':'192.168.1.100',
         'root':'broadeng',
-        'broad':'broad123'
+        'broad':'broad123',
+        'path_sql':'/home/broad/sunwenlong/iserver-sipserver/config'
 }
 
 def ssh_get_source(remote_ip,port,user,passwd):
@@ -36,7 +37,7 @@ def git_update_tar(ssh,path,file_name):
         stdin,stdout,stderr = ssh.exec_command(cmd)
         print '%s backup OK'%file_name
     except:
-        print 'Error!%s backup error'%file_name
+        print 'Error! %s backup error'%file_name
         
     if not len(stderr.read()) == 0:
         print stderr.read()
@@ -50,9 +51,9 @@ def scp_source(ssh,path,file_name):
     local_path = '%s/%s-%s.tar.gz'%(conf['path_source'],file_name,current_time)
     try:
         s = sftp.get(remote_path,local_path)
-        print 'OK!%s download sucessfully!'%file_name
+        print 'OK! %s download sucessfully!'%file_name
     except:
-        print 'Error!%s could not download!'%file_name
+        print 'Error! %s could not download!'%file_name
     
     ssh.close()
 
@@ -64,7 +65,7 @@ def clean_source(ssh,path,file_name):
     if not stderr.readlines():
         print '%s-%s.tar.gz clean up from remote'%(file_name,current_time)
     else:
-        print 'Error!%s-%s.tar.gz clean up error'%(file_name,current_time)
+        print 'Error! %s-%s.tar.gz clean up error'%(file_name,current_time)
 
 def tar_zxvf(file_name):
     '''To tar zxvf the tar_file_name '''
@@ -82,9 +83,9 @@ def tar_zxvf(file_name):
             if not err_tar:
                 print 'tar zxvf %s is OK!'%tar_file
         except:
-            err_tar = 'The command of tar zxvf %s clould not be done!Please check it!'%(tar_file)
+            err_tar = 'Error! The command of tar zxvf %s clould not be done!Please check it!'%(tar_file)
     else:
-        print 'The file of %s is not exists!Please check it in dir:%s'%(file_name, conf['path_source'])
+        print 'Error! The file of %s is not exists!Please check it in dir:%s'%(file_name, conf['path_source'])
 
     print_err(err_tar)
 
@@ -93,7 +94,7 @@ def mcu_make():
     make_path = os.path.join(conf['path_source'], 'mcu')
     print 'It will take some minutes,Please wait ......'
     if not os.path.exists(make_path):
-        print 'the dir mcu clould not be found! Please chech it in dir:/home/broad/sunwenlong/source '
+        print 'Error! The dir mcu clould not be found! Please chech it in dir:/home/broad/sunwenlong/source '
     else:
         make_cmd = 'cd %s && sudo make'%make_path
         try:
@@ -102,7 +103,7 @@ def mcu_make():
             if not err_make:
                 print 'make mcu OK!'
         except:
-            err_make = 'the mcu_make_cmd cloud not be done!'
+            err_make = 'Error! The mcu_make_cmd cloud not be done!'
     print_err(err_make)
     
     make_mcu_path = os.path.join(make_path, 'bin/release')
@@ -118,14 +119,14 @@ def mcu_make():
             err_rm = subf_rm.stderr.read()
             err_cp = subf_cp.stderr.read()
             if not err_rm:
-                print 'The command of remove the old mcu is OK!'
+                print 'OK! The command of remove the old mcu is OK!'
             if not err_cp:
-                print 'Copy the new mcu to /usr/local/bin is OK!'
+                print 'OK! Copy the new mcu to /usr/local/bin is OK!'
         except:
-            err_rm = 'The command of remove the old mcu could not be done!Please check it!'
-            err_cp = 'The command of copy the new mcu to /usr/local/bin could not be done!Please check it!'
+            err_rm = 'Error! The command of remove the old mcu could not be done!Please check it!'
+            err_cp = 'Error! The command of copy the new mcu to /usr/local/bin could not be done!Please check it!'
     else:
-        print 'The target file mcu is not exists,Please it!'
+        print 'Warning! The target file mcu is not exists,Please it!'
     print_err(err_rm)
     print_err(err_cp)
     
@@ -136,9 +137,9 @@ def restart_service(target_service):
         subf_re = Popen(re_cmd, stdout=PIPE, stderr=PIPE)
         err_re = subf_re.stderr.read()
         if not err_re:
-            print 'The command of restart the service %s is OK!'%target_service
+            print 'OK! The command of restart the service %s is OK!'%target_service
     except:
-        err_re = 'The command of restart the service %s colud not be done!'%target_service
+        err_re = 'Error! The command of restart the service %s colud not be done!'%target_service
     print_err(err_re)
 
 def print_err(s):
@@ -155,7 +156,7 @@ def clean_old_dir(dir_path):
             subf = Popen(cmd, stdout=PIPE, stderr=PIPE)
             err = subf.stderr.read()
         except:
-            err = 'The command of cleaning the old dir which is %s is not be done!Please it!'%dir_path
+            err = 'Error! The command of cleaning the old dir which is %s is not be done!Please it!'%dir_path
     return err
 
 def replace_siremis(dir_name):
@@ -168,9 +169,9 @@ def replace_siremis(dir_name):
             subf_rm = Popen(rm_cmd, stdout=PIPE, stderr=PIPE)
             err_rm = subf_rm.stderr.read()
             if not err_rm:
-                print 'The command of remove the dir : %s is OK!'%dir_name
+                print 'OK! The command of remove the dir : %s is OK!'%dir_name
         except:
-            err_rm = 'The command of remove the dir : %s colud not be done!Please chech it!'%dir_name
+            err_rm = 'Error! The command of remove the dir : %s colud not be done!Please chech it!'%dir_name
     print_err(err_rm)
     
     #to cp the new siremis to /var/www
@@ -180,9 +181,9 @@ def replace_siremis(dir_name):
         subf_cp = Popen(cp_cmd, stdout=PIPE, stderr=PIPE)
         err_cp = subf_cp.stderr.read()
         if not err_cp:
-            print 'The command of copy the dir : %s to /var/www is OK!'%dir_name
+            print 'OK! The command of copy the dir : %s to /var/www is OK!'%dir_name
     except:
-        err_cp = 'The command of copy the dir : %s to /var/www colud not be done!Please check it!'%dir_name
+        err_cp = 'Error! The command of copy the dir : %s to /var/www colud not be done!Please check it!'%dir_name
     print_err(err_cp)
     
     #to chown the owner of the dir siremis
@@ -192,16 +193,112 @@ def replace_siremis(dir_name):
             subf_ch = Popen(ch_cmd, stdout=PIPE, stderr=PIPE)
             err_ch = subf_ch.stderr.read()
             if not err_ch:
-                print 'The command of chown the %s to www-data is OK!'%dir_name
+                print 'OK! The command of chown the %s to www-data is OK!'%dir_name
         except:
-            err_ch = 'The command of chown the %s to www-data colud not be done!Please check it!'%dir_name
+            err_ch = 'Error! The command of chown the %s to www-data colud not be done!Please check it!'%dir_name
     print_err(err_ch)
 
-if __name__ == '__main__':
+def purge_kernel(kernel):
+    '''purge kernel 3.9.5 and 3.11.6'''
+    cmd = ['apt-get','purge',kernel]
+    try:
+        subf = Popen(cmd,stderr=PIPE)
+        err = subf.stderr.read()
+    except:
+        err = 'Error! The command of purge %s could not be done!'%kernel
+    if err:
+        print err
+
+def remove_rubbish(path):
+    '''remove rubbish'''
+    cmd = 'rm -Rf %s' %path
+    try:
+        subf = Popen(cmd,stderr=PIPE,shell=True)
+        err = subf.stderr.read()
+    except:
+        err = 'Error! The command of remove %s could not be done!'%path
+    if err:
+        print err
+
+def get_file_md5(file_path):
+    '''Get the file md5'''
+    if os.path.exists(file_path):
+        cmd = ['md5sum',file_path]
+        try:
+            subf = Popen(cmd,stderr=PIPE,stdout=PIPE)
+            data = subf.stdout.read()
+            err = subf.stderr.read()
+        except:
+            data = ''
+            err = 'Error! The command of md5sum %s could not be done!'%file_path
+        if err:
+            print err
+        if data:
+            md5_value = data.split()[0].strip()
+        else:
+            print 'Warning! Could not get the %s md5 value!'%file_path
+    else:
+        md5_value = ''
+        print 'Warning! The %s is not exists!'%file_path
+    return md5_value
+
+def update_sql(db_name,sql_bak_name):
+    '''update the mysql table'''
+    md5_file = '%s/md5.txt'%conf['path_source']
+    if os.path.exists(md5_file):
+        with open(md5_file,'r') as fp:
+            old_md5 = fp.read().strip()
+    else:
+        old_md5 = ''
+
+    ssh = ssh_down_load(conf['remote_ip'],conf['port'],'root',conf['root'])
+    sftp = paramiko.SFTPClient.from_transport(ssh)
+    remote_path = '%s/%s'%(conf['path_sql'],sql_bak_name)
+    local_path = '%s/%s'%(conf['path_source'],sql_bak_name)
+    try:
+        sftp.get(remote_path,local_path)
+        print 'OK! %s download sucessfully!'%sql_bak_name
+    except:
+        print 'Error! %s could not download!'%sql_bak_name
+    ssh.close()
+
+    if os.path.exists(local_path):
+        new_md5 = get_file_md5(local_path)
+    else:
+        new_md5 = ''
+        print 'Error! The file of md5 %s is not exists!'%local_path
+
+    if not old_md5 == new_md5:
+        cmd = 'mysql -uroot -pbroadeng %s < %s/%s' %(db_name,conf['path_source'],sql_bak_name)
+        try:
+            subf = Popen(cmd,stderr=PIPE,shell=True)
+            err = subf.stderr.read()
+        except:
+            err = 'Error! The command of update of the mysql table %s could not be done!'%db_name
+        if err:
+            print err
+        restart_service('mysql')
+        restart_service('mcuWeb')
+
+        with open(md5_file,'w') as fp_w:
+            fp_w.write(new_md5)
+
+def close_sudo():
+    '''close sudo users'''
+    cmd = ['cp','-f','/etc/sudoers.bak','/etc/sudoers']
+    try:
+        subf = Popen(cmd,stderr=PIPE)
+        err = subf.stderr.read()
+    except:
+        err = 'Error! The command of modify the sudoers could not be done!'
+    if err:
+        print err
+
+def main():
     #update the mcu from git and tar it to tar_file
     git_update_tar(ssh_get_source(conf['remote_ip'],conf['port'],'broad',conf['broad']),conf['path_mcu'],'mcu')
     time.sleep(1)
-    #down load the mcu tar_file 
+    #down load the mcu tar_file
     scp_source(ssh_down_load(conf['remote_ip'],conf['port'],'root',conf['root']),conf['path_mcu'],'mcu')
     time.sleep(1)
     #clean the source
@@ -215,7 +312,7 @@ if __name__ == '__main__':
     time.sleep(1)
     #restart the mcu
     restart_service('mediamixer')
-    
+
     #update the siremis from git and tar it to tar_file
     git_update_tar(ssh_get_source(conf['remote_ip'], conf['port'], 'broad', conf['broad']), conf['path_siremis'], 'siremis-4.0.0')
     time.sleep(1)
@@ -233,6 +330,20 @@ if __name__ == '__main__':
     time.sleep(1)
     #restart the apache2 to make sure it work
     restart_service('apache2')
-    
-    
-    
+
+    #update mysql table
+    update_sql('kamailio','kamailio.sql')
+
+    #purge the kernel
+    purge_kernel('linux-image-3.11.6-031106-generic')
+    purge_kernel('linux-image-3.9.5-030905-generic')
+
+    #close sudoers
+    close_sudo()
+
+    #remove the rubbish
+    remove_rubbish('/opt/*')
+    remove_rubbish('/usr/local/src/*')
+
+if __name__ == '__main__':
+    main()

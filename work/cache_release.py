@@ -188,7 +188,7 @@ if __name__ == '__main__':
     log = '/var/log/%s.log' %name
     pid_dir = '/var/run/%s'%name
     pid_file = '/var/run/%s/%s.pid'%(name,name)
-    py_script = './memrelease.py'
+    py_script = '/usr/local/tnb/memrelease.py'
     sm = ShellManage(name=name,log=log,pid_dir=pid_dir,pid_file=pid_file,py_script=py_script)
     try:
         if sys.argv[1] == 'start':
