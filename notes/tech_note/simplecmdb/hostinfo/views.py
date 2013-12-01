@@ -1,14 +1,14 @@
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-from models import Host,IpAddr
+from hostinfo.models import Host,IPaddr,HostGroup
 try:
     import json
-except:
+except ImportError,e: 
     import simplejson as json
 
 def collect(request):
     req = request
-    if req.method == 'POST':
+    if req.POST:
         vender = req.POST.get('vender')
         product = req.POST.get('product')
         cpu_model = req.POST.get('cpu_model')
@@ -28,39 +28,30 @@ def collect(request):
         host.sn = sn
         host.osver = osver
         host.hostname = hostname
-
         host.save()
 
         for ip in ipaddrs.split(':'):
-            o_ip = IpAddr()
+            o_ip = IPaddr()
             o_ip.ipaddr = ip
             o_ip.host = host
             o_ip.save()
 
-        return HttpResponse('OK')
+        return HttpResponse('ok')
     else:
-        return HttpResponse('No post data')
+        return HttpResponse('no post data')
 
-def gethosts(request):
-    if request.method == 'POST':
-        data = json.loads(request)
-        host = Host()
-        host.vender = data['verder']
-        host.product = data['product']
-        host.cpu_model = data['cpu_model']
-        host.cpu_num = data['cpu_num']
-        host.memory = data['memory']
-        host.sn = data['sn']
-        host.osver = data['osver']
-        host.hostname = data['hostname']
+def gethosts(req):
+    ret = []
+    hostgroups = HostGroup.objects.all()
+    for hg in hostgroups:
+        ret_hg = {'hostgroup':hg.name,'members':[]}
+        members = hg.members.all()
+        for h in members:
+            ret_h = {'hostname':h.hostname,
+                 'ipaddr':[i.ipaddr for i in h.ipaddr_set.all()]
+                }
+            ret_hg['members'].append(ret_h)
+        ret.append(ret_hg)
+    ret_status = {'status':0,'data':ret,'message':'ok'}
+    return HttpResponse(json.dumps(ret_status))
 
-        host.save()
-
-        ipaddrs = data['ipaddrs']
-        for ip in ipaddrs.split(':'):
-            o_ip = IpAddr()
-            o_ip.ipaddr = ip
-            o_ip.host = host
-            o_ip.save()
-    else:
-        return HttpResponse('No post data')

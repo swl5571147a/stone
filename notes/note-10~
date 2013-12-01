@@ -1,0 +1,60 @@
+1.SSH命令交互  pexpect  paramiko
+  client = paramiko.SSHClient()          实例化SSH对象
+
+  client.load_sys_host_keys()            可以注释掉
+  client.set_misssing_host_key_policy(paramiko.AutoAddPolicy())       忽略输入yes的步骤
+
+  client.connect(hostname='hostname',username='username',password='passwd')   连接主机
+  stdin,stdout,stderr = clent.exec_command('command')          向服务器发送命令，返回标准输入/输出/错误
+
+  client.close()
+
+2.多线程  threading   thread
+  sound = threading.Thread(target=fun,args=(5,'sound'))
+  media = threading.Thread(target=fun,args=(5,'media'))    线程调用函数fun，使用参数(5,'media')
+
+  sound.start()         开始调用线程   sound.start_new_thread()
+  media.start()
+  sound.join()          等到线程结束后再执行进程
+  media.join()
+
+  sound.run()   等于   sound.start() + sound.join()    但是只能不能一起执行
+
+3.django  signols  
+  当修改主机名称以后，真的修改各个主机的hostname
+
+4.configParser
+  对各种配置文件进行自动化阅读和处理
+  configParser.__init__(self,allow_no_value=True)
+  setattr(self,key,value)   该类的设置属性一般的类可以使用__setattr__进行
+  c = ConfigureParser(allow_no_value=True)    实例化，参数为空值亦可
+  c.read('file_name')       读取配置文件
+  c.sections()              获取配置文件中的所有标签
+  c.get('section_name','optin_name')     获取该标签下的该选项的值
+  c.options('section_name') 获取该标签所有的选项（即等号前的内容）
+  c.set('section_name','optin_name','option_value')    修改该标签下此选项的值
+  c.write(open('file_name','w'))    将上面使用set所修改的值写入文件中。此时会将所有注释给取消掉
+
+5.函数多参数传递
+  def fun(**kw):     这样处理可以在使用的时候传递任意的字典参数
+      kw.items()     都可以使用kw进行字典取值
+  fun(a=10,b=2)     使用的时候就可以如此
+
+6.python连接mysql
+  安装sudo apt-get install python-mysqldb,在centos下为
+  import MySQLdb
+  conn = MySQLdb.connect()      没有参数，默认连接127.0.0.1
+                conn=MySQLdb.connect(host="localhost",user="root",passwd="",db="test",charset="utf8")
+  conn.select_db('db_name')     选择数据库
+  cur = conn.cursor()           创建游标指针
+  cur.execute('mysql_cmd')      传递执行mysql命令  cur.execute('show global varibles;')  显示所有结构
+     cur.execute('mysql_cmd',('args1','args2'))   不用拼接命令,直接使用使用这种方式传递参数，单一参数
+     cur.executemany('mysql_cmd',[('a1','a2'),('a3','a4))])   一次传入多个参数，如一次插入两组数据
+  cur.fetchall()                配合select的命令使用。
+  cur.close()
+  conn.close()
+
+
+作业：
+1.创建多实例Mysql，主从，使用optparse使用-c参数等，-n --name  
+2.熟悉Django中的signals信号传输

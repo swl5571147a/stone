@@ -1,0 +1,53 @@
+1.puppet
+  服务器资源统一管理工具
+
+2.python传递POST
+  import urllib,urllib2
+  url = 'http://x.x.x.x/x/x'
+  d = {'a':a,'b':b}
+  urllib2.urlopen(url,urllib.urlencode(d))
+
+3.__file__  $0 
+  __file__ 获取当前文件的文件名
+  $0 在shell中获取当前文件的文件名
+  os.path.dirname(__file__)  获取当前所在的文件夹名
+
+4.json
+  import json
+  json.dump(dict)   将python的字典变成json格式的数据
+  json.loads(str)   将json的数据变成一个python的字典，并会添加uncode的编码
+
+5.
+  Exit Status
+  0:OK
+  1:WARNING
+  2:CRITICAL
+  3:UNKNOWN
+
+  &    shell中表示后台运行
+  &&   shell中表示前一个脚本正确执行以后才这行后一个脚本
+  ||   shell中表示前一个脚本没有正确执行，才执行后一个脚本
+  
+  if [-e filename] then
+      pass
+  fi
+  上面三行可以变成一行：[-e filename] && pass || other    如果文件存在，执行pass，如果pass出错，执行other
+
+6.centOS 6.x
+  epel.repo  需要安装
+  内存管理和文件系统管理需要知道
+
+7.checke
+  check_mem.py -w 500 -c 100
+
+8.单位换算 B K M G T P
+  2.0**10 = 1024
+  2.0**20 = 1024*1024
+
+9.puppet   资源集中管理工具
+  安装：sudo apt-get install puppet puppetmaster facter
+  需要支持yaml：sudo apt-get install python-yaml
+
+作业：
+1.将11g 11G等变成B
+2.分析/var/log/message的error投放到nagios

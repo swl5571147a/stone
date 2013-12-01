@@ -1,4 +1,4 @@
-from models import Host,IpAddr
+from models import Host,IpAddr,HostGroup
 from django.contrib import admin
 
 class HostAdmin(admin.ModelAdmin):
@@ -7,5 +7,9 @@ class HostAdmin(admin.ModelAdmin):
 class IpAddrAdmin(admin.ModelAdmin):
     list_display = ['ipaddr','host']
 
+class HostGroupAdmin(admin.ModelAdmin):
+    list_display = ['name',]
+
 admin.site.register(Host,HostAdmin)
 admin.site.register(IpAddr,IpAddrAdmin)
+admin.site.register(HostGroup,HostGroupAdmin)

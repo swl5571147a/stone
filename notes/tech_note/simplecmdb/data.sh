@@ -1,0 +1,1 @@
+curl -d vender='DELL' -d product='2014' -d osver='windows8.1' -d memory='4' -d cpu_model='Intel' -d cpu_num=8 -d sn='X XxxX' -d ipaddrs="202.106.0.20:1.2.3.4" -d hostname='web02'     http://192.168.137.100:8000/api/collect/
