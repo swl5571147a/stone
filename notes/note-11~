@@ -1,0 +1,69 @@
+1.mysql读写分离与主从备份
+  读写分离：master做写，slave做读，提高硬盘效率，避免多次寻址与随即写入，使用一个寻址，一个顺序写入，提高效率
+  主从备份：a)mysql同步速度慢   b)同步数据不一致
+  a)备份自动化：全备份和增量备份
+  b)恢复自动化
+  c)增加从服务器自动化
+  d)智能监控
+
+2.多实例mysql
+  msql_install_db --defaluts-file=/opt/my.cnf   生成实例
+  mysqld_safe --defaults-file=/opt/my.cnf       启动实例
+  mysql -S /opt/my.sock -u user -p passwd       进去该实例
+  mysqldump -S /opt/my.sock -u user -A -x -F > aa.sql   备份单实例，-x代表锁定数据库，所以一般在从库上做，-F表示将日至也
+                                                        写入，如binlog等
+  mysqladmin -S /opt/my.sock shutdown                关闭该实例
+  my.py -c create -t slave -n slave01 -p 3309 127.0.0.1 3306 /opt/backup.sql -i 2
+
+  show global variables like '%service_id%';    查看mysql全局变量
+  show slave status\G        查看slave状态
+  slave start;               启动slave
+  status                     查看数据库状态
+
+3.Percona Xtrabackup
+  当数据库很大的时候，建议使用这个mysql备份工具
+
+4.stdin stdout 重定向操作
+  代码中
+
+5.mysql主从操作   
+  主：Server ID、binlog、User(同步用户)
+ 
+6.Mysql的DNS参考
+  MySQL使用DNS的过程
+
+当 mysql 客户端连接 mysql 服务器 (进程为：mysqld)，mysqld 会创建一个新的线程来处理该请求。该线程先检查是否主机名在主机名缓存中。如果不在，线程试图解析主机名。
+
+如果系统是线程安全的，则 gethostbyaddr_r () 和 gethostbyname_r() 被调用，来执行主机名解析；
+
+如果系统不支持线程安全调用，则线程会锁定一个互斥体并调用 gethostbyaddr() 和 gethostbyname() 。在这种情况下，在第1个线程解锁互斥体前，没有其它线程可以解析不在主机名缓存中的主机名。
+
+通过 --skip-name-resolve 选项启动 mysqld 来禁用DNS主机名查找。此时，只可以使用 MySQL 授权表中的 IP 地址，不能使用主机名。
+
+如果 DNS 解析很慢且包括许多主机，通过用--skip-name-resolve 禁用DNS查找或增加HOST_CACHE_SIZE定义(默认值：128)并重新编译mysqld来提高性能；
+
+通过 --skip-host-cache 选项启动服务器来禁用主机名缓存。要想清除主机名缓存，执行 FLUSH HOSTS 语句或执行 mysqladmin flush-hosts 命令。
+
+如果要完全禁止 TCP/IP 连接，用 --skip-networking 选项启动 mysqld 。
+
+
+7.zip使用
+  keys = ('a','b','c')
+  values = (1,2,3)
+  list = zip(keys,values)       list = [('a',1),('b',2),('c',3)]  如果有一方数据多，怎会被抛弃
+  dict = dict(zip(keys,values))     生成字典
+
+8.dns使用
+  参考文档：www.dnspython.org
+  安装：sudo apt-get install python-dns python-dnspython
+
+  a)生成key dnssec-keygen生成key
+  b)dns.ksigkeyring
+    dns.rdata
+    dns.rdataset
+    dns.rdataclass
+
+作业：
+1、添加一个stop功能  start功能
+2、端口、PID、SOCK、名称等是否占用检查
+3、-c adjuest max_connection=100 并写入配置文件中，命令如：set global variables max_connection=200;动态调整conf

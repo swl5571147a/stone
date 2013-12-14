@@ -1,0 +1,17 @@
+['mysql_install_db', '--defaults-file=/var/mysqlmanager/cnfs/swltest5.cnf']
+['chown', '-R', 'mysql', '/var/mysqlmanager/data/swltest5']
+mysqld_safe --defaults-file=/var/mysqlmanager/cnfs/swltest5.cnf &
+stone@stone:~/desktop/learn_python/7837987$ ps aux|grep mysql
+
+/bin/sh /usr/bin/mysqld_safe --defaults-file=/var/mysqlmanager/cnfs/swltest5.cnf
+
+/usr/sbin/mysqld --defaults-file=/var/mysqlmanager/cnfs/swltest5.cnf 
+--basedir=/usr 
+--datadir=/var/mysqlmanager/data/swltest5 
+--plugin-dir=/usr/lib/mysql/plugin 
+--user=mysql 
+--log-error=/var/log/mysqld.log 
+--pid-file=/var/mysqlmanager/data/swltest5/swltest5.pid 
+--socket=/tmp/swltest5.sock 
+--port=3309
+
