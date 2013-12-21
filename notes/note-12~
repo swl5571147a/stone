@@ -1,0 +1,58 @@
+1、监控
+  功能：health check(服务可用性等D R W C)、性能监测
+  nagios    icinga是其升级版
+  zenoss    rrdtool
+  ganglia   rrd
+  mrtg      使用SNMP协议
+  collectd  rrd，使用C语言编写，性能更好一些，无图形界面
+
+  textmate   NB的文件编辑器  MAC下
+  sublime text  NB的文件编辑器
+
+2、graphite-web graphite-carbon graphite-wisper
+   官方文档：graphite.readthedocs.org/en/latest/
+   
+  修改local_settings.py
+  /usr/bin/django-admin syncdb --settings=local_settings --pythonpath=.
+  django-admin syncdb --settings=graphite.local_settings --pythonpath=..
+  修改目录所有者
+  参考网址：http://iteches.com/archives/45929
+  安装配置步骤：
+  sudo apt-get install apache2 libapache2-mod-wsgi python-django python-twisted python-cairo python-pip python-django-tagging
+  sudo pip install whisper
+  sudo pip install carbon
+  sudo pip install graphite-web
+
+  初始化配置，直接用 example 文件里的默认配置就可以：
+  cd /opt/graphite/conf/
+  sudo cp carbon.conf.example carbon.conf
+  sudo cp storage-schemas.conf.example storage-schemas.conf
+  sudo cp graphite.wsgi.example graphite.wsgi 
+
+  修改 apache 配置，增加一个 vhost 或者偷懒下载一个配置文件覆盖 default，覆盖后需要重新 reload 配置： 
+  sudo cp /opt/graphite/examples/example-graphite-vhost.conf /etc/apache2/sites-available/default
+  sudo /etc/init.d/apache2 reload
+
+  修改graphite-web配置文件
+  cd /opt/graphite/webapp/graphite
+  sudo vim local_settings.py
+  取消注释：13、18、34、57、62-64、75-79、150-159、204
+  
+  初始化 graphite 需要的数据库，修改 storage 的权限，用拷贝的方式创建 local_settings.py 文件
+  cd /opt/graphite/webapp/graphite
+  sudo django-admin syncdb --settings=graphite.local_settings --pythonpath=..
+  sudo chown -R www-data:www-data /opt/graphite/storage/
+  sudo cp local_settings.py.example local_settings.py
+
+  sudo /etc/init.d/apache2 restart 
+  
+  启动
+  sudo /opt/graphite/bin/carbon-cache.py start
+3、虚拟机工具 VAGRANT
+
+
+4、查看系统版本
+  cat /etc/issue
+
+5、往graphite传数据
+  

@@ -1,0 +1,27 @@
+1、网页共享目录
+  import SimpleHTTPServer
+  python -m SimpleHTTPServer    就可以启动虚拟机实例
+
+  dropbox  同步工具
+
+2、守护进程
+  二次fork来创造deamon进程，当程序创造一个子进程以后，自己自杀，保留子进程
+  os.getpid()    获得当前运行程序的pid
+  os.fork()      生成一个子进程，返回一个pid
+  os._exit(0)  sys.exit(0)    结束当前进程，os._exit(0)不清除缓冲区，sys.exit(0)操作系统会回收系统缓冲资源
+  os.chdir('/')  切换目录
+  os.setsid()     二次fork之前，初始化新的pid    
+  os.umask(0)    可以让进程切换用户
+  os.path.join()  可以接受多个参数进行拼接
+  os.remove(file_name)   删除文件
+
+  atexit模块：定义当进程结束之前需要做的事情
+  atexit.register(function_name, file_name=name)    向atexit注册，传入两个参数：函数名称和参数
+  signal.signal(signal.SIGTERM, sys.exitfunc)       这里需要修改atexit的源吗:/usr/lib/python2.7/atexit.py
+  
+
+3、vim复制
+  :17,19 co 22   将17行到19行的内容复制，从22行开始
+
+4、信息收集工具diamond
+  git上获得
