@@ -1,0 +1,43 @@
+1、上线
+  jenkins之前叫做Hudson
+
+
+2、设定执行用户
+   env.username='root'
+   env.password='passwd'
+
+3、程序上线
+  方式一：软连接方式，将程序上传完毕，然后直接修改软连接，如apache2的目录
+  方式二：灰度上线，将一部分主机从服务中摘除，进行更新，然后投入服务（需要两个版本可以兼容）
+  方式三：rsync和svn同步
+
+4、tarfile 使用
+   tar = tarfile.open(pkg_name, 'r:*')                     
+   tar.extractall(path)                                    解压到指定目录
+
+5、版本对比模块
+  from distutils.version import LooseVersion
+  s1 = '1.2.3a'
+  s2 = '1.3'
+  list = [LooseVersion(s1), LooseVersion(s2)]       生成版本对象列表
+  list.sort()                                       列表排序
+
+6、文件操作模块
+   shutil    可以删除目录、创建文件、删除文件等等
+
+7、整体步骤
+   build
+     |___合并css js等
+     |___最小化css js，打包源代码等
+   deploy--->分发应用
+   check---->检查
+   live----->发布，创建软连接等
+  
+
+8、statusd   logstash  el      kibana
+  logstash            日志收集
+  electceSearch         日志存储，用来可搜索
+  kibana              日志图形显示
+
+  rsyslog  scribe(facebook)
+  
